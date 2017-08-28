@@ -25,7 +25,11 @@ def processCabin():
     if keep_binary:
         cletters = pd.get_dummies(df['CabinLetter']).rename(columns = lambda x: 'CabinLetter_' + str(x))
         df = pd.concat([df, cletters], axis =1)
-        print df
+    df['CabinNumber'] = df['Cabin'].map(lambda x : getCabinNumber(x)).astype(int) + 1
+    if keep_scaled:
+        scaler = preprocessing.StandardScaler()
+        df['CabinNumber_scaled'] = scaler.fit_transform(df['CabinNumber'])
+    
         
 def getCabinLetter(cabin):
     match = re.compile("([a-zA-Z]+)").search(cabin)
@@ -33,6 +37,13 @@ def getCabinLetter(cabin):
         return match.group()
     else:
         return 'U'
+    
+def getCabinNumber(cabin):
+    match = re.compile("([0-9]+)").search(cabin)
+    if match:
+        return match.group()
+    else:
+        return 0
         
     
 
@@ -76,6 +87,7 @@ def getDataSets(binary = False, bins = False, scaled = False, strings = False, \
     df.drop('index', axis = 1, inplace = True)
     df = df.reindex_axis(input_df.columns, axis = 1)
     processCabin()
+    print df
     
     
     
