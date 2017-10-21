@@ -44,6 +44,10 @@ def getCabinNumber(cabin):
         return match.group()
     else:
         return 0
+
+def processTicket():
+    global df
+    df['TicketPrefix'] = df['Ticket'].map(lambda x: 
         
     
 
@@ -87,8 +91,8 @@ def getDataSets(binary = False, bins = False, scaled = False, strings = False, \
     df.drop('index', axis = 1, inplace = True)
     df = df.reindex_axis(input_df.columns, axis = 1)
     processCabin()
-    print df
-    
+    processTicket()
+
     
     
     
